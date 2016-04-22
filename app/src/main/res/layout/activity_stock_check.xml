@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/itemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Subject"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:id="@+id/refresh"
+        android:src="@drawable/refresh"
+        android:onClick="check"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/itemName" />
+    <ImageButton
+        android:id="@+id/investigate"
+        android:src="@drawable/investigate_icon"
+        android:layout_width="fill_parent"
+        android:onClick="seeItem"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/refresh"
+        android:layout_alignRight="@+id/refresh"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CeX Stock Watch</string>
+    <string name="action_settings">Settings</string>
+    <string name="share">Share</string>
+    <string name="title_activity_watchlist">Watchlist</string>
+    <string name="title_activity_add_item_popup">AddItemPopup</string>
+    <string name="title_activity_view_activity_popup">ViewActivityPopup</string>
+    <string name="title_activity_stock_check">StockCheck</string>
+    <string name="title_activity_barcode_scanner">BarcodeScanner</string>
+</resources>
