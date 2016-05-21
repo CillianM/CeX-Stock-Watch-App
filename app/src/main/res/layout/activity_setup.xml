@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/logo">
+
+
+    <EditText
+        android:id="@+id/nameField"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:hint="Enter Your Name"
+        android:layout_centerInParent="true"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/emailField"
+        android:hint="Enter an email"
+        android:gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/nameField"
+        android:layout_alignRight="@+id/nameField"
+        android:layout_below="@+id/nameField"/>
+
+    <EditText
+        android:id="@+id/barcodeField"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter numbers on the card"
+        android:layout_alignLeft="@+id/emailField"
+        android:layout_alignRight="@+id/emailField"
+        android:layout_below="@+id/emailField"
+        android:numeric="integer"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/addBarcode"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="scanBarcode"
+        android:text="Add loyalty card"
+        android:layout_alignLeft="@+id/emailField"
+        android:layout_below="@+id/emailField"
+        android:layout_alignRight="@+id/emailField" />
+    <Button
+        android:id="@+id/skipBarcode"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:onClick="skipBarcode"
+        android:text="Don't Have One?"
+        android:layout_alignRight="@+id/emailField"
+        android:layout_below="@+id/addBarcode" />
+
+    <Button
+        android:id="@+id/manualBarcode"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:onClick="manualBarcode"
+        android:text="Enter it manually"
+        android:layout_below="@+id/addBarcode"
+        android:layout_alignLeft="@+id/emailField" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="submitInfo"
+        android:text="Submit"
+        android:layout_alignRight="@+id/emailField"
+        android:layout_alignLeft="@+id/emailField"
+        android:layout_alignParentBottom="true" />
+        />
+
+
+</RelativeLayout>

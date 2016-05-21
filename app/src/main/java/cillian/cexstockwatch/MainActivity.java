@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 //show webview
                 findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
                 findViewById(R.id.watch).setVisibility(View.VISIBLE);
-                findViewById(R.id.list).setVisibility(View.VISIBLE);
+                findViewById(R.id.profile).setVisibility(View.VISIBLE);
                 findViewById(R.id.scan).setVisibility(View.VISIBLE);
             }
         });
 
         FloatingActionButton watch = (FloatingActionButton) findViewById(R.id.watch);
-        FloatingActionButton list = (FloatingActionButton) findViewById(R.id.list);
+        FloatingActionButton profile = (FloatingActionButton) findViewById(R.id.profile);
         FloatingActionButton scan = (FloatingActionButton) findViewById(R.id.scan);
         watch.setOnClickListener(new View.OnClickListener()
         {
@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        list.setOnClickListener(new View.OnClickListener()
+        profile.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
-                Intent intent = new Intent(MainActivity.this, Watchlist.class);
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });

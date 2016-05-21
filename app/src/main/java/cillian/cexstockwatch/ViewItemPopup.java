@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ViewItemPopup extends Activity {
 
@@ -42,11 +43,19 @@ public class ViewItemPopup extends Activity {
     public void updateName(View v)
     {
         String newName = currentName.getText().toString();
-        DatabaseHandler handler = new DatabaseHandler(getBaseContext());
-        handler.open();
-        handler.updateName(name, newName);
-        handler.close();
-        finish();
+        if(newName.length() < 2)
+        {
+            Toast.makeText(getBaseContext(), "Enter a name with more than 2 letters!", Toast.LENGTH_LONG).show();
+        }
+
+        else
+        {
+            DatabaseHandler handler = new DatabaseHandler(getBaseContext());
+            handler.open();
+            handler.updateName(name, newName);
+            handler.close();
+            finish();
+        }
     }
 
     public void delete(View v)

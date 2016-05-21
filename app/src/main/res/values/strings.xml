@@ -7,4 +7,7 @@
     <string name="title_activity_view_activity_popup">ViewActivityPopup</string>
     <string name="title_activity_stock_check">StockCheck</string>
     <string name="title_activity_barcode_scanner">BarcodeScanner</string>
+    <string name="title_activity_setup">SetupActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_view_barcode_popup">ViewBarcodePopup</string>
 </resources>

@@ -38,12 +38,21 @@ public class AddItemPopup extends Activity {
     public void addSubject(View v)
     {
         name = newSubject.getText().toString();
+        if(name.length() < 2)
+        {
+            Toast.makeText(getBaseContext(), "Enter a name with more than 2 letters!", Toast.LENGTH_LONG).show();
+        }
+
+        else
+        {
         DatabaseHandler handler = new DatabaseHandler(getBaseContext());
         handler.open();
         handler.insertData(name, url);
+        int tmp = handler.returnAmount();
         handler.close();
         Toast.makeText(getBaseContext(), "Item Added To Watchlist!", Toast.LENGTH_LONG).show();
         finish();
+        }
     }
 
     public void done(View v)

@@ -8,22 +8,23 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHandler {
+public class UserHandler {
 
     public static final String NAME = "name";
-    public static final String URL = "url";
-    public static final String TABLE_NAME = "stock";
-    public static final String DATA_BASE_NAME = "dataDB";
+    public static final String EMAIL = "email";
+    public static final String BARCODE = "barcode";
+    public static final String TABLE_NAME = "user";
+    public static final String DATA_BASE_NAME = "myDB";
     public static final int DATABASE_VERSION = 1;
-    public static final String TABLE_CREATE = "create table stock (name text not null, " +
-            "url text not null);";
+    public static final String TABLE_CREATE = "create table user (name text not null, " +
+            "email text not null," + "barcode text not null);";
 
     DataBaseHelper dbhelper;
     Context ctx;
     SQLiteDatabase db;
 
 
-    public DatabaseHandler(Context ctx)
+    public UserHandler(Context ctx)
     {
         this.ctx = ctx;
         dbhelper = new DataBaseHelper(ctx);
@@ -59,7 +60,7 @@ public class DatabaseHandler {
         }
     }
 
-    public DatabaseHandler open()
+    public UserHandler open()
     {
         db = dbhelper.getWritableDatabase();
         return this;
@@ -70,11 +71,12 @@ public class DatabaseHandler {
         dbhelper.close();
     }
 
-    public long insertData(String name,String url)
+    public long insertData(String name,String email,String barcode)
     {
         ContentValues content = new ContentValues();
         content.put(NAME,name);
-        content.put(URL, url);
+        content.put(EMAIL, email);
+        content.put(BARCODE, barcode);
         return db.insert(TABLE_NAME,null,content);
     }
 
@@ -85,7 +87,7 @@ public class DatabaseHandler {
 
     public Cursor returnData()
     {
-        return db.query(TABLE_NAME, new String[]{NAME, URL}, null, null, null, null, null);
+        return db.query(TABLE_NAME, new String[]{NAME, EMAIL, BARCODE}, null, null, null, null, null);
     }
 
     public boolean updateName(String oldname,String newname)
@@ -96,8 +98,21 @@ public class DatabaseHandler {
         return true;
     }
 
-    public void removeName(String name)
+    public boolean updateEmail(String oldEmail,String newEmail)
     {
-        db.delete(TABLE_NAME, NAME + " = ?", new String[]{name});
+        ContentValues content = new ContentValues();
+        content.put(EMAIL,newEmail);
+        db.update(TABLE_NAME, content, EMAIL + " = ?", new String[]{oldEmail});
+        return true;
     }
+
+    public boolean updateBarcode(String oldBarcode,String newBarcode)
+    {
+        ContentValues content = new ContentValues();
+        content.put(BARCODE,newBarcode);
+        db.update(TABLE_NAME, content, BARCODE + " = ?", new String[]{oldBarcode});
+        return true;
+    }
+
 }
+
