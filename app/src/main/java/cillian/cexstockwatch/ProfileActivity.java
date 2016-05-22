@@ -31,7 +31,12 @@ public class ProfileActivity extends AppCompatActivity {
         createBarcode();
         createList();
 
-        BarcodeCreator bc = new BarcodeCreator(barcode,barcodeImage);
+        if(!barcode.equals("Skipped"))
+        {
+            BarcodeCreator bc = new BarcodeCreator(barcode, barcodeImage);
+            bc.createBarcode();
+        }
+
         nameText = (TextView)(findViewById(R.id.userData));
         nameText.setText(barcode+ System.getProperty("line.separator") + username+ System.getProperty("line.separator"));
         //create listview

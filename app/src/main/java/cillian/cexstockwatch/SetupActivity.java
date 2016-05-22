@@ -27,6 +27,7 @@ public class SetupActivity extends AppCompatActivity {
     Button skip;
     Button add;
     Button submit;
+    Button manual;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class SetupActivity extends AppCompatActivity {
         skip = (Button)(findViewById(R.id.skipBarcode));
         add = (Button)(findViewById(R.id.addBarcode));
         submit = (Button)(findViewById(R.id.submitButton));
+        manual = (Button)(findViewById(R.id.manualBarcode));
 
         handler = new UserHandler(getBaseContext());
         handler.open();
@@ -53,6 +55,7 @@ public class SetupActivity extends AppCompatActivity {
         barcodeField.setText("Skipped");
         skip.setVisibility(View.GONE);
         add.setVisibility(View.GONE);
+        manual.setVisibility(View.GONE);
     }
 
     public void submitInfo(View v)
@@ -166,11 +169,10 @@ public class SetupActivity extends AppCompatActivity {
 
     public void manualBarcode(View v)
     {
-        Button manaul = (Button)(findViewById(R.id.manualBarcode));
         barcodeField.setVisibility(View.VISIBLE);
         skip.setVisibility(View.GONE);
         add.setVisibility(View.GONE);
-        manaul.setVisibility(View.GONE);
+        manual.setVisibility(View.GONE);
     }
 
 }

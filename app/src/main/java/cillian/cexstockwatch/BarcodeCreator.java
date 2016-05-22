@@ -20,10 +20,25 @@ import com.google.zxing.common.BitMatrix;
 
 public class BarcodeCreator {
 
+    String barcode_data;
+    ImageView iv;
     BarcodeCreator(String data, ImageView iv)
     {
-        String barcode_data = data;
+        barcode_data = data;
+        this.iv = iv;
+    }
 
+    /**************************************************************
+     * getting from com.google.zxing.client.android.encode.QRCodeEncoder
+     *
+     * See the sites below
+     * http://code.google.com/p/zxing/
+     * http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/encode/EncodeActivity.java
+     * http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/encode/QRCodeEncoder.java
+     */
+
+    void createBarcode()
+    {
         // barcode image
         Bitmap bitmap = null;
         try {
@@ -35,15 +50,6 @@ public class BarcodeCreator {
             e.printStackTrace();
         }
     }
-
-    /**************************************************************
-     * getting from com.google.zxing.client.android.encode.QRCodeEncoder
-     *
-     * See the sites below
-     * http://code.google.com/p/zxing/
-     * http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/encode/EncodeActivity.java
-     * http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/encode/QRCodeEncoder.java
-     */
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;

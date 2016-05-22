@@ -12,7 +12,9 @@
         android:layout_height="50dp"
         android:hint="Enter Your Name"
         android:layout_centerInParent="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:lines="1"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/emailField"
@@ -22,7 +24,9 @@
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/nameField"
         android:layout_alignRight="@+id/nameField"
-        android:layout_below="@+id/nameField"/>
+        android:layout_below="@+id/nameField"
+        android:lines="1"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/barcodeField"
@@ -34,7 +38,9 @@
         android:layout_alignRight="@+id/emailField"
         android:layout_below="@+id/emailField"
         android:numeric="integer"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:lines="1"
+        android:singleLine="true"/>
 
     <Button
         android:id="@+id/addBarcode"
