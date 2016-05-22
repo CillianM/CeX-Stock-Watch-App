@@ -31,7 +31,7 @@
         android:id="@+id/scan"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Scan new barcode..."
+        android:text="Scan new barcode"
         android:onClick="scan"
         android:layout_below="@+id/submit"
         android:layout_alignLeft="@+id/submit"

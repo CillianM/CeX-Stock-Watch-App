@@ -17,6 +17,9 @@ import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -117,78 +120,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void scanBarcode()
     {
-        try
-        {
-            //start the scanning activity from the com.google.zxing.client.android.SCAN intent
-            Intent intent = new Intent(ACTION_SCAN);
-            intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
-            startActivityForResult(intent, 0);
-        } catch (ActivityNotFoundException anfe) {
-            //on catch, show the download dialog
-            showDialog(this, "No Scanner Found", "Download a scanner code activity?", "Yes", "No").show();
-        }
-
+        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+        scanIntegrator.initiateScan();
     }
-
-    //alert dialog for downloadDialog
-    public AlertDialog showDialog(final Activity act, CharSequence title, CharSequence message, CharSequence buttonYes, CharSequence buttonNo) {
-
-        AlertDialog.Builder downloadDialog;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            downloadDialog = new AlertDialog.Builder(act, android.R.style.Theme_Material_Light_Dialog_Alert);
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanningResult != null) {
+            String contents = intent.getStringExtra("SCAN_RESULT");
+            String url = "https://ie.m.webuy.com/site/productDetail?productId=" + contents;
+            intent = new Intent(this, MainActivity.class);
+            intent.putExtra("URL", url);
+            startActivity(intent);
         }
 
-        else
-        {
-            downloadDialog = new AlertDialog.Builder(act);
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
         }
-
-        downloadDialog.setTitle(title);
-        downloadDialog.setMessage(message);
-        downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                Uri uri = Uri.parse("market://search?q=pname:" + "com.google.zxing.client.android");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                try
-                {
-                    act.startActivity(intent);
-                }
-
-                catch (ActivityNotFoundException anfe)
-                {
-                    System.out.println(anfe);
-                }
-            }
-        });
-
-        downloadDialog.setNegativeButton(buttonNo, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-            }
-        });
-        return downloadDialog.show();
-    }
-
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
-        if (requestCode == 0)
-        {
-            if (resultCode == RESULT_OK)
-            {
-
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                String url = "https://ie.m.webuy.com/site/productDetail?productId=" + contents;
-                intent = new Intent(this, MainActivity.class);
-                intent.putExtra("URL", url);
-                startActivity(intent);
-            }
-        }
-
     }
 
     private class ItemAdder extends AsyncTask<Void,Void,Void>
