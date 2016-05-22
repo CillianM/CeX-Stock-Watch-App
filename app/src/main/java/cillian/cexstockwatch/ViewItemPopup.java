@@ -26,7 +26,7 @@ public class ViewItemPopup extends Activity {
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width * .6), (int) (height * .4));
+        getWindow().setLayout((int) (width * .6), (int) (height * .3));
 
         currentName = (EditText)findViewById(R.id.potentialItem);
 
@@ -37,7 +37,9 @@ public class ViewItemPopup extends Activity {
 
     public void done(View v)
     {
-        finish();
+        Intent intent = new Intent(this,ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public void updateName(View v)
@@ -54,7 +56,9 @@ public class ViewItemPopup extends Activity {
             handler.open();
             handler.updateName(name, newName);
             handler.close();
-            finish();
+            Intent intent = new Intent(this,ProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 
@@ -64,7 +68,9 @@ public class ViewItemPopup extends Activity {
         handler.open();
         handler.removeName(name);
         handler.close();
-        finish();
+        Intent intent = new Intent(this,ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
 

@@ -8,65 +8,50 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class ViewBarcodePopup extends Activity {
+public class CardRegistrationActivity extends AppCompatActivity {
 
+    String name;
+    String email;
     String barcode;
-    EditText currentName;
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_view_barcode_popup);
-
-
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        getWindow().setLayout((int) (width * .6), (int) (height * .25));
-
-        currentName = (EditText)findViewById(R.id.potentialItem);
-
+        setContentView(R.layout.activity_card_registration);
         Intent intent = getIntent();
-        barcode = intent.getStringExtra("BAR");
+        name = intent.getStringExtra("NAME");
+        email = intent.getStringExtra("EMAIL");
+        TextView brief = (TextView)(findViewById(R.id.Description));
+        String description = getResources().getString(R.string.description);
+        brief.setText(System.getProperty("line.separator") + "Hello " + name + "! "+ System.getProperty("line.separator") + description);
     }
 
-    public void done(View v)
+
+    public void submit()
     {
-        Intent intent = new Intent(this,ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        UserHandler handler = new UserHandler(getBaseContext());
+        handler.open();
+        handler.insertData(name, email, barcode);
+        handler.close();
+        Intent intent = new Intent(CardRegistrationActivity.this,MainActivity.class);
         startActivity(intent);
+        finish();
+        Toast.makeText(getBaseContext(), "Profile Created Succesfully!", Toast.LENGTH_LONG).show();
     }
 
-    public void updateName(View v)
+    public void skip(View v)
     {
-        String newBarcode = currentName.getText().toString();
-        if(newBarcode.length() < 2)
-        {
-            Toast.makeText(getBaseContext(), "Enter a name with more than 2 letters!", Toast.LENGTH_LONG).show();
-        }
-
-        else
-        {
-            UserHandler handler = new UserHandler(getBaseContext());
-            handler.open();
-            handler.updateBarcode(barcode, newBarcode);
-            handler.close();
-            Intent intent = new Intent(this,ProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }
+        barcode= "Skipped";
+        submit();
     }
 
-    public void scan(View v)
+    public void addBarcode(View v)
     {
         try
         {
@@ -131,11 +116,12 @@ public class ViewBarcodePopup extends Activity {
         {
             if (resultCode == RESULT_OK)
             {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                currentName.setText(contents);
+
+                barcode = intent.getStringExtra("SCAN_RESULT");
+                submit();
             }
         }
 
     }
-}
 
+}

@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,9 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
         else
         {
-            Intent intent = new Intent(MainActivity.this, AddItemPopup.class);
-            intent.putExtra("URL", url);
-            startActivity(intent);
+            ItemAdder item = new ItemAdder(url);
+            item.execute();
         }
     }
 
@@ -184,6 +189,56 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private class ItemAdder extends AsyncTask<Void,Void,Void>
+    {
+        private String url;
+        private String str;
+        ItemAdder(String url)
+        {
+            this.url = url;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+            try
+            {
+                URL inputURL = new URL(url);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(inputURL.openStream()));
+                String strTemp;
+                while(null != (strTemp = br.readLine()))
+                {
+                    if(strTemp.contains("productTitle"))
+                    {
+                        int start = strTemp.indexOf(">");
+                        int end = strTemp.indexOf("<",start);
+                        str = strTemp.substring(start + 1,end);
+                        break;
+                    }
+                }
+                br.close();
+            }
+
+            catch (Exception ex)
+            {
+                Toast.makeText(getBaseContext(), "Unable to add item please try again later", Toast.LENGTH_LONG).show();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            DatabaseHandler handler = new DatabaseHandler(getBaseContext());
+            handler.open();
+            handler.insertData(str, url);
+            handler.close();
+            Toast.makeText(getBaseContext(), "Item added to watchlist!", Toast.LENGTH_LONG).show();
+            super.onPostExecute(aVoid);
+        }
     }
 }
 

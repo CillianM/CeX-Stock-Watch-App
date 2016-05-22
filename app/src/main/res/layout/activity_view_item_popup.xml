@@ -38,15 +38,4 @@
         android:layout_alignRight="@+id/submit"
         android:layout_alignEnd="@+id/submit"/>
 
-    <Button
-        android:id="@+id/dismiss"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Dismiss"
-        android:onClick="done"
-        android:layout_below="@+id/delete"
-        android:layout_alignLeft="@+id/delete"
-        android:layout_alignStart="@+id/delete"
-        android:layout_alignRight="@+id/delete"
-        android:layout_alignEnd="@+id/delete"/>
 </RelativeLayout>

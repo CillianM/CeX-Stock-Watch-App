@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+
     <TextView
         android:id="@+id/Title"
         android:layout_width="match_parent"
@@ -22,9 +23,7 @@
             xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/barCode"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/red"
-            />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -47,6 +46,15 @@
             android:layout_height="match_parent"
             android:id="@+id/itemList">
         </ListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/noItems"
+            android:visibility="gone"
+            android:text="Items you watch will appear here!"
+            android:textSize="20sp"
+            android:gravity="center">
+        </TextView>
     </LinearLayout>
 
 </LinearLayout>

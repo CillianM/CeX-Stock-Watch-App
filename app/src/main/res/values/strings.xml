@@ -10,4 +10,10 @@
     <string name="title_activity_setup">SetupActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_view_barcode_popup">ViewBarcodePopup</string>
+    <string name="title_activity_card_registration">CardRegistrationActivity</string>
+    <string name="description">This nifty little card allows you to keep track of all your purchases and vouchers
+    in store. Here we can add it to the app so if you ever lose the card or just don\'t have it on you then you can
+    scan the phone instead, cool right?
+    Don\'t have one? No worries! Just skip this step and if you ever get one you can
+    add it later.</string>
 </resources>
