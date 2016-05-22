@@ -71,7 +71,7 @@ public class ViewBarcodePopup extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
+        if (scanningResult != null && resultCode==RESULT_OK) {
             String contents = intent.getStringExtra("SCAN_RESULT");
             currentName.setText(contents);
         }

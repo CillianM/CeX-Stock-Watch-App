@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
+        if (scanningResult != null && resultCode==RESULT_OK) {
             String contents = intent.getStringExtra("SCAN_RESULT");
             String url = "https://ie.m.webuy.com/site/productDetail?productId=" + contents;
             intent = new Intent(this, MainActivity.class);

@@ -63,7 +63,7 @@ public class CardRegistrationActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
+        if (scanningResult != null && resultCode==RESULT_OK) {
             barcode = scanningResult.getContents();
             submit();
         }
