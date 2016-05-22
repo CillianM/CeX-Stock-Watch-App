@@ -26,55 +26,70 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        barcodeImage = (ImageView)(findViewById(R.id.barCode));
+        barcodeImage = (ImageView) (findViewById(R.id.barCode));
 
         createBarcode();
-        createList();
+        nameText = (TextView) (findViewById(R.id.userData));
 
-        if(!barcode.equals("Skipped"))
-        {
+
+        if (!barcode.equals("Skipped")) {
             BarcodeCreator bc = new BarcodeCreator(barcode, barcodeImage);
             bc.createBarcode();
+            nameText.setText(barcode + System.getProperty("line.separator") + username + System.getProperty("line.separator"));
+        } else {
+            barcodeImage.setImageResource(R.drawable.card);
+            nameText.setText(username + System.getProperty("line.separator"));
         }
 
-        nameText = (TextView)(findViewById(R.id.userData));
-        nameText.setText(barcode+ System.getProperty("line.separator") + username+ System.getProperty("line.separator"));
-        //create listview
+
         ListView mainListView = (ListView) findViewById(R.id.itemList);
-        //create listener for each link in list
-        mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            //on item click create a url and open it in the browser
-            public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-                String url = listOfURLs[position];
-                String name = listOfItems[position];
-                Intent intent = new Intent(ProfileActivity.this, StockCheck.class);
-                intent.putExtra("URL", url);
-                intent.putExtra("NAME", name);
-                startActivity(intent);
-            }
-        });
 
-        mainListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            //on item click create a url and open it in the browser
-            public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) {
-                String url = listOfURLs[position];
-                String name = listOfItems[position];
-                Intent intent = new Intent(ProfileActivity.this, ViewItemPopup.class);
-                intent.putExtra("URL", url);
-                intent.putExtra("NAME", name);
-                startActivity(intent);
-                return true;
-            }
-        });
+        if (itemsSaved()) {
+            createList();
 
-        linkArrayAdaptor listAdapter = new linkArrayAdaptor(this, listOfItems);
-        mainListView.setAdapter(listAdapter);
+            //create listview
+
+            //create listener for each link in list
+            mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                //on item click create a url and open it in the browser
+                public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+                    String url = listOfURLs[position];
+                    String name = listOfItems[position];
+                    Intent intent = new Intent(ProfileActivity.this, StockCheck.class);
+                    intent.putExtra("URL", url);
+                    intent.putExtra("NAME", name);
+                    startActivity(intent);
+                }
+            });
+
+            mainListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                //on item click create a url and open it in the browser
+                public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) {
+                    String url = listOfURLs[position];
+                    String name = listOfItems[position];
+                    Intent intent = new Intent(ProfileActivity.this, ViewItemPopup.class);
+                    intent.putExtra("URL", url);
+                    intent.putExtra("NAME", name);
+                    startActivity(intent);
+                    return true;
+                }
+            });
+
+            linkArrayAdaptor listAdapter = new linkArrayAdaptor(this, listOfItems);
+            mainListView.setAdapter(listAdapter);
+        }
+        else
+        {
+            TextView noItems = (TextView) findViewById(R.id.noItems);
+            mainListView.setVisibility(View.GONE);
+            noItems.setVisibility(View.VISIBLE);
+        }
 
         barcodeImage.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
 
-                Intent intent = new Intent(ProfileActivity.this,ViewBarcodePopup.class);
-                intent.putExtra("BAR",barcode);
+                Intent intent = new Intent(ProfileActivity.this, ViewBarcodePopup.class);
+                intent.putExtra("BAR", barcode);
                 startActivity(intent);
                 return true;
             }
@@ -82,6 +97,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public boolean itemsSaved()
+    {
+        DatabaseHandler handler = new DatabaseHandler(getBaseContext());
+        handler.open();
+        int amount = handler.returnAmount();
+        handler.close();
+        return(amount > 0);
+    }
     void createList()
     {
         DatabaseHandler handler = new DatabaseHandler(getBaseContext());

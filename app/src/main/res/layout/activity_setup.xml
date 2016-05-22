@@ -28,57 +28,26 @@
         android:lines="1"
         android:singleLine="true"/>
 
-    <EditText
-        android:id="@+id/barcodeField"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="Enter numbers on the card"
-        android:layout_alignLeft="@+id/emailField"
-        android:layout_alignRight="@+id/emailField"
-        android:layout_below="@+id/emailField"
-        android:numeric="integer"
-        android:visibility="gone"
-        android:lines="1"
-        android:singleLine="true"/>
-
-    <Button
-        android:id="@+id/addBarcode"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:onClick="scanBarcode"
-        android:text="Add loyalty card"
-        android:layout_alignLeft="@+id/emailField"
-        android:layout_below="@+id/emailField"
-        android:layout_alignRight="@+id/emailField" />
-    <Button
-        android:id="@+id/skipBarcode"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:onClick="skipBarcode"
-        android:text="Don't Have One?"
-        android:layout_alignRight="@+id/emailField"
-        android:layout_below="@+id/addBarcode" />
-
-    <Button
-        android:id="@+id/manualBarcode"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:onClick="manualBarcode"
-        android:text="Enter it manually"
-        android:layout_below="@+id/addBarcode"
-        android:layout_alignLeft="@+id/emailField" />
-
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="50dp"
         android:onClick="submitInfo"
         android:text="Submit"
-        android:layout_alignRight="@+id/emailField"
-        android:layout_alignLeft="@+id/emailField"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
         />
+    <Button
+        android:id="@+id/skipButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:onClick="skipSetup"
+        android:text="Skip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    />
 
 
 </RelativeLayout>
