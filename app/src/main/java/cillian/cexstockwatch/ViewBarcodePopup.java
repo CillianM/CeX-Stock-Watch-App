@@ -47,7 +47,7 @@ public class ViewBarcodePopup extends Activity {
         String newBarcode = currentName.getText().toString();
         if(newBarcode.length() < 2)
         {
-            Toast.makeText(getBaseContext(), "Enter a name with more than 2 letters!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Enter a code with more than 2 letters!", Toast.LENGTH_LONG).show();
         }
 
         else

@@ -10,14 +10,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class UserHandler {
 
-    public static final String NAME = "name";
+    public static final String URL = "url";
     public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
     public static final String BARCODE = "barcode";
     public static final String TABLE_NAME = "user";
     public static final String DATA_BASE_NAME = "myDB";
     public static final int DATABASE_VERSION = 1;
-    public static final String TABLE_CREATE = "create table user (name text not null, " +
-            "email text not null," + "barcode text not null);";
+    public static final String TABLE_CREATE = "create table user (url text not null," + "password text not null," + "email text not null," + "barcode text not null);";
 
     DataBaseHelper dbhelper;
     Context ctx;
@@ -71,13 +71,14 @@ public class UserHandler {
         dbhelper.close();
     }
 
-    public long insertData(String name,String email,String barcode)
+    public long insertData(String url,String email,String password,String barcode)throws Exception
     {
         ContentValues content = new ContentValues();
-        content.put(NAME,name);
+        content.put(URL,url);
         content.put(EMAIL, email);
+        content.put(PASSWORD,password);
         content.put(BARCODE, barcode);
-        return db.insert(TABLE_NAME,null,content);
+        return db.insertOrThrow(TABLE_NAME, null, content);
     }
 
     public int returnAmount()
@@ -87,14 +88,15 @@ public class UserHandler {
 
     public Cursor returnData()
     {
-        return db.query(TABLE_NAME, new String[]{NAME, EMAIL, BARCODE}, null, null, null, null, null);
+        return db.query(TABLE_NAME, new String[]{URL, EMAIL,PASSWORD, BARCODE}, null, null, null, null, null);
     }
 
-    public boolean updateName(String oldname,String newname)
+
+    public boolean updateURL(String oldURL,String newURL)
     {
         ContentValues content = new ContentValues();
-        content.put(NAME,newname);
-        db.update(TABLE_NAME,content,NAME + " = ?", new String[] { oldname });
+        content.put(URL,newURL);
+        db.update(TABLE_NAME,content,URL + " = ?", new String[] { oldURL });
         return true;
     }
 
@@ -103,6 +105,14 @@ public class UserHandler {
         ContentValues content = new ContentValues();
         content.put(EMAIL,newEmail);
         db.update(TABLE_NAME, content, EMAIL + " = ?", new String[]{oldEmail});
+        return true;
+    }
+
+    public boolean updatePassword(String oldPass,String newPass)
+    {
+        ContentValues content = new ContentValues();
+        content.put(PASSWORD,newPass);
+        db.update(TABLE_NAME, content, PASSWORD + " = ?", new String[]{oldPass});
         return true;
     }
 

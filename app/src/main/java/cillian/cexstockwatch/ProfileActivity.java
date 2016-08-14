@@ -135,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
             do {
                 username = c1.getString(0);
                 email = c1.getString(1);
-                barcode = c1.getString(2);
+                barcode = c1.getString(3);
             }
             while (c1.moveToNext());
         }

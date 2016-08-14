@@ -50,6 +50,7 @@ public class StockCheck extends Activity {
     {
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("URL",url);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -101,7 +102,7 @@ public class StockCheck extends Activity {
 
             catch (Exception ex)
             {
-                System.out.println("Looks like there was a problem! Check the query you entered and try again \n For the more tech savvy here is the error: \n" + ex);
+                System.out.println("Looks like there was a problem!");
             }
 
             return null;

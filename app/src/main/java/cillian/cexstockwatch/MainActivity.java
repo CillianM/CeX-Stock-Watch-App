@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,8 +13,10 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -26,7 +29,9 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    private WebView mWebView;
+    WebView mWebView;
+    String pass;
+    String email;
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
 
     @Override
@@ -34,33 +39,32 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String currentUrl = "https://ie.m.webuy.com/";
+        String currentUrl= "https://ie.m.webuy.com";
+        final UserHandler handler = new UserHandler(getBaseContext());
+        handler.open();
+        if(handler.returnAmount() > 0) {
+            Cursor c1 = handler.returnData();
+            if (c1.moveToFirst()) {
+                do {
+                    currentUrl = "https://" + c1.getString(0) + "/";
+                    email = c1.getString(1);
+                    try {
+                        pass = c1.getString(2);
+                        pass = Crypto.decrypt(email,pass);
+                    } catch (Exception e) {
 
-        Intent intent = getIntent();
-        String potentialUrl = intent.getStringExtra("URL");
-        if (potentialUrl != null)
-        {
-            findViewById(R.id.splash).setVisibility(View.GONE);
-            currentUrl = potentialUrl;
+                    }
+                }
+                while (c1.moveToNext());
+            }
+            handler.close();
         }
 
 
-        mWebView = (WebView) findViewById(R.id.activity_main_webview);
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        mWebView.loadUrl(currentUrl);
-        mWebView.setWebViewClient(new cillian.cexstockwatch.WebviewExt() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                //hide loading image
-                findViewById(R.id.progressBar1).setVisibility(View.GONE);
-                //show webview
-                findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
-                findViewById(R.id.watch).setVisibility(View.VISIBLE);
-                findViewById(R.id.profile).setVisibility(View.VISIBLE);
-                findViewById(R.id.scan).setVisibility(View.VISIBLE);
-            }
-        });
+
+        login();
+
+
 
         FloatingActionButton watch = (FloatingActionButton) findViewById(R.id.watch);
         FloatingActionButton profile = (FloatingActionButton) findViewById(R.id.profile);
@@ -86,6 +90,83 @@ public class MainActivity extends AppCompatActivity {
         {
             public void onClick(View view) {
                 scanBarcode();
+            }
+        });
+    }
+
+    public void login()
+    {
+        String url = "https://ie.m.webuy.com";
+        UserHandler handler = new UserHandler(getBaseContext());
+        handler.open();
+        if(handler.returnAmount() > 0) {
+            Cursor c1 = handler.returnData();
+            if (c1.moveToFirst()) {
+                do {
+                    url = c1.getString(0);
+                    email = c1.getString(1);
+                    try {
+                        pass = c1.getString(2);
+                        pass = Crypto.decrypt(email,pass);
+                    } catch (Exception e) {
+
+                    }
+                }
+                while (c1.moveToNext());
+            }
+            handler.close();
+        }
+
+        if(!email.equals("Skipped"))
+            url = url + "/member/login";
+
+        boolean linkFromProfile = false;
+        Intent intent = getIntent();
+        String potentialUrl = intent.getStringExtra("URL");
+        if (potentialUrl != null)
+        {
+            linkFromProfile = true;
+            findViewById(R.id.splash).setVisibility(View.GONE);
+            url = potentialUrl;
+            email = "Skipped";
+        }
+
+        mWebView = (WebView) findViewById(R.id.activity_main_webview);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
+        if(!linkFromProfile)
+            mWebView.loadUrl("https://" + url);
+        else
+            mWebView.loadUrl(url);
+        mWebView.setWebViewClient(new WebViewClient() {
+
+            public void onPageFinished(WebView view, String url) {
+
+                if (!email.equals("Skipped")) {
+                    final String js = "javascript:" +
+                            "document.getElementById('uname').value = '" + email + "';" +
+                            "document.getElementById('pwd').value = '" + pass + "';" +
+                            "document.getElementById('loginBtn').click()";
+
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        view.evaluateJavascript(js, new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String s) {
+
+                            }
+                        });
+                    } else {
+                        view.loadUrl(js);
+                    }
+                }
+
+                //hide loading image
+                findViewById(R.id.progressBar1).setVisibility(View.GONE);
+                //show webview
+                findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
+                findViewById(R.id.watch).setVisibility(View.VISIBLE);
+                findViewById(R.id.profile).setVisibility(View.VISIBLE);
+                findViewById(R.id.scan).setVisibility(View.VISIBLE);
             }
         });
     }

@@ -16,4 +16,5 @@
     scan the phone instead, cool right?
     Don\'t have one? No worries! Just skip this step and if you ever get one you can
     add it later.</string>
+    <string name="title_activity_account_registration">AccountRegistration</string>
 </resources>

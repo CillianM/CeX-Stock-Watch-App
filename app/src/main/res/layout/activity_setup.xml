@@ -5,49 +5,152 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/logo">
 
-
-    <EditText
-        android:id="@+id/nameField"
+    <TextView
+        android:id="@+id/description"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:hint="Enter Your Name"
+        android:text="Choose Your Country"
+        android:textSize="25dp"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:lines="1"
-        android:singleLine="true"/>
+        android:singleLine="true" />
 
-    <EditText
-        android:id="@+id/emailField"
+    <ImageButton
+        android:id="@+id/ireland"
+
         android:hint="Enter an email"
+        android:src="@drawable/irish_flag"
         android:gravity="center"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/nameField"
-        android:layout_alignRight="@+id/nameField"
-        android:layout_below="@+id/nameField"
-        android:lines="1"
-        android:singleLine="true"/>
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_alignLeft="@+id/description"
+        android:layout_below="@+id/description"
+        android:background="@null"
+        android:layout_marginRight="15dp" />
 
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:onClick="submitInfo"
-        android:text="Submit"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-        />
-    <Button
-        android:id="@+id/skipButton"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:onClick="skipSetup"
-        android:text="Skip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <ImageButton
+        android:id="@+id/uk"
+        android:src="@drawable/uk_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/ireland"
+        android:layout_below="@+id/description"
+        android:background="@null"
+        android:layout_marginRight="15dp" />
+
+    <ImageButton
+        android:id="@+id/us"
+        android:src="@drawable/us_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/uk"
+        android:layout_below="@+id/description"
+        android:background="@null"
+        android:layout_marginRight="15dp" />
+
+    <ImageButton
+        android:id="@+id/spain"
+        android:src="@drawable/spain_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/us"
+        android:layout_below="@+id/description"
+        android:background="@null"
+        android:layout_marginRight="15dp" />
+
+    <ImageButton
+        android:id="@+id/india"
+        android:src="@drawable/india_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_alignLeft="@+id/ireland"
+        android:layout_below="@+id/ireland"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/portugal"
+        android:src="@drawable/portugal_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/india"
+        android:layout_below="@+id/ireland"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/netherlands"
+        android:src="@drawable/netherlands_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/portugal"
+        android:layout_below="@+id/ireland"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/mexico"
+        android:src="@drawable/mexico_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/netherlands"
+        android:layout_below="@+id/ireland"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/poland"
+        android:src="@drawable/poland_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_alignLeft="@+id/india"
+        android:layout_below="@+id/india"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/austrailia"
+        android:src="@drawable/aus_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/poland"
+        android:layout_below="@+id/india"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/italy"
+        android:src="@drawable/italy_flag"
+        android:gravity="center"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_toRightOf="@+id/austrailia"
+        android:layout_below="@+id/india"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" />
+
+
     />
+
+
 
 
 </RelativeLayout>

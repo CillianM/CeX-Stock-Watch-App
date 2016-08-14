@@ -38,7 +38,7 @@ public class CardRegistrationActivity extends AppCompatActivity {
     {
         UserHandler handler = new UserHandler(getBaseContext());
         handler.open();
-        handler.insertData(name, email, barcode);
+        //handler.insertData(name, email,email, barcode);
         handler.close();
         Intent intent = new Intent(CardRegistrationActivity.this,MainActivity.class);
         startActivity(intent);
