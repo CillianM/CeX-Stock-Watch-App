@@ -37,6 +37,8 @@ public class SetupActivity extends AppCompatActivity {
             handler.close();
             startActivity(intent);
         }
+
+
     }
 
     public void finishSetup(String countryUrl)

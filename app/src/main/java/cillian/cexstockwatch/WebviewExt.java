@@ -10,8 +10,9 @@ public class WebviewExt extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView view, String url)
     {
 
-        if(Uri.parse(url).getHost().endsWith("webuy.com"))
+        if(Uri.parse(url).getHost().endsWith("m.webuy.com"))
         {
+            view.clearCache(true);
             return false;
         }
 

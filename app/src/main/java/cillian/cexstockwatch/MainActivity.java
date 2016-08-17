@@ -1,23 +1,20 @@
 package cillian.cexstockwatch;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
 import android.webkit.ValueCallback;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -32,7 +29,19 @@ public class MainActivity extends AppCompatActivity {
     WebView mWebView;
     String pass;
     String email;
+    boolean loginComplete;
+    boolean expanded = false;
     static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
+    Animation show_watch;
+    Animation hide_watch;
+    Animation show_profile;
+    Animation hide_profile;
+    Animation show_scan ;
+    Animation hide_scan;
+    FloatingActionButton watch;
+    FloatingActionButton profile;
+    FloatingActionButton scan;
+    FloatingActionButton expand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,38 +69,93 @@ public class MainActivity extends AppCompatActivity {
             handler.close();
         }
 
-
-
         login();
 
 
+        show_watch = AnimationUtils.loadAnimation(getApplication(), R.anim.left_fab_show);
+        hide_watch = AnimationUtils.loadAnimation(getApplication(), R.anim.left_fab_hide);
+        show_profile = AnimationUtils.loadAnimation(getApplication(), R.anim.top_fab_show);
+        hide_profile = AnimationUtils.loadAnimation(getApplication(), R.anim.top_fab_hide);
+        show_scan = AnimationUtils.loadAnimation(getApplication(), R.anim.right_fab_show);
+        hide_scan = AnimationUtils.loadAnimation(getApplication(), R.anim.right_fab_hide);
+        watch = (FloatingActionButton) findViewById(R.id.watch);
+        profile = (FloatingActionButton) findViewById(R.id.profile);
+        scan = (FloatingActionButton) findViewById(R.id.scan);
+        expand = (FloatingActionButton) findViewById(R.id.expand);
 
-        FloatingActionButton watch = (FloatingActionButton) findViewById(R.id.watch);
-        FloatingActionButton profile = (FloatingActionButton) findViewById(R.id.profile);
-        FloatingActionButton scan = (FloatingActionButton) findViewById(R.id.scan);
-        watch.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+
+        hide_watch.setAnimationListener(new Animation.AnimationListener(){
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                watch.setClickable(false);
+                profile.setClickable(false);
+                scan.setClickable(false);
+            }
+        });
+
+        show_watch.setAnimationListener(new Animation.AnimationListener(){
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                watch.setClickable(true);
+                profile.setClickable(true);
+                scan.setClickable(true);
+            }
+        });
+
+        expand.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                //Move the other buttons and make them visible
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+
+
+                if(!expanded) {
+                    ViewCompat.animate(expand).rotation(135f).withLayer().setDuration(800).setInterpolator(interpolator).start();
+                    expanded = true;
+                    showFAB();
+                }
+
+                else
+                {
+                    ViewCompat.animate(expand).rotation(-180f).withLayer().setDuration(800).setInterpolator(interpolator).start();
+                    expanded = false;
+                    hideFAB();
+                }
+            }
+        });
+
+        watch.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 popup();
             }
         });
 
-        profile.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        profile.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
 
-        scan.setOnClickListener(new View.OnClickListener()
-        {
+        scan.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 scanBarcode();
             }
         });
+
+
     }
 
     public void login()
@@ -120,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         if(!email.equals("Skipped"))
             url = url + "/member/login";
 
+        loginComplete = false;
         boolean linkFromProfile = false;
         Intent intent = getIntent();
         String potentialUrl = intent.getStringExtra("URL");
@@ -138,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
             mWebView.loadUrl("https://" + url);
         else
             mWebView.loadUrl(url);
-        mWebView.setWebViewClient(new WebViewClient() {
+        mWebView.setWebViewClient(new cillian.cexstockwatch.WebviewExt() {
 
             public void onPageFinished(WebView view, String url) {
 
@@ -159,14 +224,23 @@ public class MainActivity extends AppCompatActivity {
                         view.loadUrl(js);
                     }
                 }
+                String currentURL = mWebView.getUrl();
+                if(currentURL.contains("login"))
+                {
 
-                //hide loading image
-                findViewById(R.id.progressBar1).setVisibility(View.GONE);
-                //show webview
-                findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
-                findViewById(R.id.watch).setVisibility(View.VISIBLE);
-                findViewById(R.id.profile).setVisibility(View.VISIBLE);
-                findViewById(R.id.scan).setVisibility(View.VISIBLE);
+                    //TODO Need to check if login has succeeded or not
+                    TextView loadingText = (TextView)findViewById(R.id.loading_text);
+                    loadingText.setText("Logging In...");
+
+                    //hide loading image
+                    findViewById(R.id.progressBar1).setVisibility(View.GONE);
+                    findViewById(R.id.loading_text).setVisibility(View.GONE);
+                    //show webview
+                    findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
+                    findViewById(R.id.expand).setVisibility(View.VISIBLE);
+                }
+
+
             }
         });
     }
@@ -185,8 +259,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        mWebView.clearCache(true);
+        getBaseContext().deleteDatabase("webview.db");
+        getBaseContext().deleteDatabase("webviewCache.db");
+    }
+
+    private void hideFAB() {
+
+        watch.startAnimation(hide_watch);
+        scan.startAnimation(hide_scan);
+        profile.startAnimation(hide_profile);
+    }
+
+    private void showFAB() {
+        watch.startAnimation(show_watch);
+        scan.startAnimation(show_scan);
+        profile.startAnimation(show_profile);
+    }
+
     public void popup()
     {
+
         String url = mWebView.getUrl();
 
         if(!url.contains("productDetail"))
