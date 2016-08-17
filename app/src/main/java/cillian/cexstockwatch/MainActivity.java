@@ -232,13 +232,15 @@ public class MainActivity extends AppCompatActivity {
                     TextView loadingText = (TextView)findViewById(R.id.loading_text);
                     loadingText.setText("Logging In...");
 
-                    //hide loading image
-                    findViewById(R.id.progressBar1).setVisibility(View.GONE);
-                    findViewById(R.id.loading_text).setVisibility(View.GONE);
-                    //show webview
-                    findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
-                    findViewById(R.id.expand).setVisibility(View.VISIBLE);
+
                 }
+
+                //hide loading image
+                findViewById(R.id.progressBar1).setVisibility(View.GONE);
+                findViewById(R.id.loading_text).setVisibility(View.GONE);
+                //show webview
+                findViewById(R.id.activity_main_webview).setVisibility(View.VISIBLE);
+                findViewById(R.id.expand).setVisibility(View.VISIBLE);
 
 
             }
