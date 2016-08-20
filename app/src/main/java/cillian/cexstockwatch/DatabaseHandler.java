@@ -11,11 +11,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHandler {
 
     public static final String NAME = "name";
+    public static final String PIC = "pic";
     public static final String URL = "url";
     public static final String TABLE_NAME = "stock";
     public static final String DATA_BASE_NAME = "dataDB";
     public static final int DATABASE_VERSION = 1;
-    public static final String TABLE_CREATE = "create table stock (name text not null, " +
+    public static final String TABLE_CREATE = "create table stock (name text not null, " + "pic text not null," +
             "url text not null);";
 
     DataBaseHelper dbhelper;
@@ -70,10 +71,11 @@ public class DatabaseHandler {
         dbhelper.close();
     }
 
-    public long insertData(String name,String url)
+    public long insertData(String name,String url,String pic)
     {
         ContentValues content = new ContentValues();
         content.put(NAME,name);
+        content.put(PIC,pic);
         content.put(URL, url);
         return db.insert(TABLE_NAME,null,content);
     }
@@ -85,7 +87,7 @@ public class DatabaseHandler {
 
     public Cursor returnData()
     {
-        return db.query(TABLE_NAME, new String[]{NAME, URL}, null, null, null, null, null);
+        return db.query(TABLE_NAME, new String[]{NAME, URL,PIC}, null, null, null, null, null);
     }
 
     public boolean updateName(String oldname,String newname)

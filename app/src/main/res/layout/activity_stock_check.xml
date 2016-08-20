@@ -5,30 +5,132 @@
     android:orientation="vertical"
     android:background="@color/white">
 
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:indeterminate="false"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/connectionMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="25dp"
+        android:onClick="refreshStock"
+        android:text="No Internet Connection!"
+        />
+
     <TextView
         android:id="@+id/itemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Subject"
+        android:textSize="20dp"
         android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true" />
-
-    <ImageButton
-        android:id="@+id/refresh"
-        android:src="@drawable/refresh"
-        android:onClick="check"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/itemName" />
-    <ImageButton
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/buyHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WeSell for:"
+        android:textSize="20dp"
+        android:layout_above="@+id/buy"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/buy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Null"
+        android:textSize="20dp"
+        android:layout_above="@+id/cashHead"
+        android:gravity="center_horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/cashHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WeBuy for Cash:"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/cash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Null"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/cashHead"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/creditHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WeBuy for Voucher:"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/cash"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/credit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Null"
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/creditHead"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible" />
+
+
+    <ImageView
+        android:id="@+id/stockImage"
+        android:src="@drawable/default_stock"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/itemName"
+        android:visibility="invisible" />
+
+
+    <Button
         android:id="@+id/investigate"
         android:src="@drawable/investigate_icon"
         android:layout_width="fill_parent"
         android:onClick="seeItem"
-        android:layout_height="100dp"
-        android:layout_alignLeft="@+id/refresh"
-        android:layout_alignRight="@+id/refresh"
-        android:layout_alignParentBottom="true" />
+        android:text="Not In Stock!"
+        android:textSize="15dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/stockImage"
+        android:layout_alignRight="@+id/stockImage"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>
