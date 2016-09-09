@@ -1,0 +1,185 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScanningList"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2.0"
+        android:src="@drawable/default_stock"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/SelectedCashValue"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Cash Value"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/SelectedCashIcon"
+            android:layout_toEndOf="@+id/SelectedCashIcon"
+            />
+        <TextView
+            android:id="@+id/SelectedCreditValue"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Credit Value"
+            android:textSize="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingRight="15dp" />
+
+        <ImageView
+            android:id="@+id/SelectedCashIcon"
+            android:src="@drawable/cash"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
+
+        <ImageView
+            android:id="@+id/SelectedCreditIcon"
+            android:src="@drawable/credit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/SelectedCreditValue"
+            android:layout_toStartOf="@+id/SelectedCreditValue" />
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/itemListRefresh"
+        android:layout_weight="2.0">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2.0"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.0"
+            android:orientation="vertical" >
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/scanList">
+            </ListView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/noItems"
+                android:visibility="gone"
+                android:text="Items you watch will appear here!"
+                android:textSize="20sp"
+                android:gravity="center">
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/Total"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text=""
+        android:gravity="center"
+        android:textSize="30sp"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/ScanNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scan New Code"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:onClick="scanNew"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
+
+        <Button
+            android:id="@+id/CalculateTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Calculate Total"
+            android:onClick="calculateTotals"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            />
+
+        <TextView
+            android:id="@+id/CashValue"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Cash Value"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/CashIcon"
+            android:layout_toEndOf="@+id/CashIcon"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/CreditValue"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Credit Value"
+            android:textSize="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"
+            android:paddingRight="15dp"/>
+
+        <ImageView
+            android:id="@+id/CashIcon"
+            android:src="@drawable/cash"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/CreditIcon"
+            android:src="@drawable/credit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/CreditValue"
+            android:layout_toStartOf="@+id/CreditValue"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+
+
+</LinearLayout>
