@@ -7,12 +7,14 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ie.cex.Connectivity.DetectConnection;
 import ie.cex.Connectivity.DownloadImage;
 import ie.cex.Connectivity.ProductGrabber;
+import ie.cex.Connectivity.WatchlistGrabber;
 import ie.cex.DatabaseHandler.DatabaseHandler;
 
 import ie.cex.R;
@@ -35,9 +37,16 @@ public class StockCheck extends Activity {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
+
+
+       ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar2);
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
+        findViewById(R.id.progressBar2).setVisibility(View.VISIBLE);
+        findViewById(R.id.connectionMessage).setVisibility(View.GONE);
+
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width * .8), (int) (height * .8));
+        getWindow().setLayout((int) (width * .7), (int) (height * .7));
 
         Intent intent = getIntent();
         url = intent.getStringExtra("URL");
@@ -57,47 +66,13 @@ public class StockCheck extends Activity {
 
     public void check()
     {
-        findViewById(R.id.progressBar2).setVisibility(View.GONE);
         if(DetectConnection.checkInternetConnection(StockCheck.this)) {
             findViewById(R.id.connectionMessage).setVisibility(View.GONE);
             ImageView stockImage = (ImageView) findViewById(R.id.stockImage);
             DownloadImage downloadImage = new DownloadImage(stockImage);
             downloadImage.execute(picUrl);
-            ProductGrabber grabber = new ProductGrabber(new DatabaseHandler(getBaseContext()), url, true);
+            WatchlistGrabber grabber = new WatchlistGrabber(new DatabaseHandler(getBaseContext()), url, true,findViewById(android.R.id.content));
             grabber.execute();
-            try {
-                grabber.get();
-            } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "An error occured please try again later", Toast.LENGTH_LONG).show();
-            }
-            Button button = (Button) findViewById(R.id.investigate);
-            button.setClickable(false);
-
-
-            TextView buy = (TextView) findViewById(R.id.buy);
-            TextView cash = (TextView) findViewById(R.id.cash);
-            TextView credit = (TextView) findViewById(R.id.credit);
-
-            grabber.price = grabber.price.substring(grabber.price.indexOf(";") + 1, grabber.price.indexOf(".") + 3);
-            buy.setText(grabber.price);
-            cash.setText(grabber.cash.substring(grabber.cash.indexOf(";") + 1, grabber.cash.indexOf(".") + 3));
-            credit.setText(grabber.credit.substring(grabber.credit.indexOf(";") + 1, grabber.credit.indexOf(".") + 3));
-
-            if (grabber.inStock) {
-                button.setText("In Stock!");
-            }
-
-            button.setClickable(true);
-
-            findViewById(R.id.buy).setVisibility(View.VISIBLE);
-            findViewById(R.id.cash).setVisibility(View.VISIBLE);
-            findViewById(R.id.credit).setVisibility(View.VISIBLE);
-            findViewById(R.id.buyHeader).setVisibility(View.VISIBLE);
-            findViewById(R.id.cashHead).setVisibility(View.VISIBLE);
-            findViewById(R.id.creditHead).setVisibility(View.VISIBLE);
-            findViewById(R.id.itemName).setVisibility(View.VISIBLE);
-            findViewById(R.id.investigate).setVisibility(View.VISIBLE);
-            findViewById(R.id.stockImage).setVisibility(View.VISIBLE);
         }
         else
         {

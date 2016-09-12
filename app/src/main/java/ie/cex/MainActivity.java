@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
         {
             if(DetectConnection.checkInternetConnection(MainActivity.this)) {
                 try {
-                    ProductGrabber grabber = new ProductGrabber(new DatabaseHandler(getBaseContext()), url, false);
+                    ProductGrabber grabber = new ProductGrabber(new DatabaseHandler(getBaseContext()), url);
                     grabber.execute();
                     grabber.get(1000, TimeUnit.MILLISECONDS);
                     Toast.makeText(getBaseContext(), "Item added to watchlist!", Toast.LENGTH_LONG).show();

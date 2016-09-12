@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:background="@color/white">
 
     <ProgressBar
@@ -13,7 +16,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:indeterminate="false"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/connectionMessage"
@@ -23,6 +26,7 @@
         android:textSize="25dp"
         android:onClick="refreshStock"
         android:text="No Internet Connection!"
+        android:visibility="invisible"
         />
 
     <TextView
@@ -34,7 +38,7 @@
         android:gravity="center_horizontal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:visibility="invisible"/>
+        android:visibility="visible"/>
 
     <ImageView
         android:paddingLeft="10dp"
@@ -43,11 +47,10 @@
         android:src="@drawable/sell"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:visibility="invisible"
-        android:layout_below="@+id/stockImage"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+        android:visibility="visible"
+        android:layout_below="@+id/itemName"
+        android:layout_toRightOf="@+id/itemName"
+        android:layout_toEndOf="@+id/itemName" />
 
     <TextView
         android:id="@+id/buy"
@@ -56,13 +59,13 @@
         android:text="Null"
         android:textSize="20dp"
         android:gravity="center"
-        android:visibility="invisible"
+        android:visibility="visible"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/buyHeader"
-        android:layout_alignLeft="@+id/stockImage"
-        android:layout_alignStart="@+id/stockImage"
-        android:layout_alignRight="@+id/stockImage"
-        android:layout_alignEnd="@+id/stockImage"
-        android:layout_alignTop="@+id/buyHeader" />
+        android:layout_alignTop="@+id/buyHeader"
+        android:layout_alignLeft="@+id/cash"
+        android:layout_alignStart="@+id/cash" />
 
     <ImageView
         android:paddingLeft="10dp"
@@ -72,10 +75,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:gravity="center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_below="@+id/buyHeader"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignLeft="@+id/buyHeader"
+        android:layout_alignStart="@+id/buyHeader" />
 
     <TextView
         android:id="@+id/cash"
@@ -86,11 +89,10 @@
         android:gravity="center"
         android:layout_alignBottom="@+id/cashHead"
         android:layout_alignTop="@+id/cashHead"
-        android:layout_alignLeft="@+id/stockImage"
-        android:layout_alignStart="@+id/stockImage"
-        android:layout_alignRight="@+id/stockImage"
-        android:layout_alignEnd="@+id/stockImage"
-        android:visibility="invisible" />
+        android:visibility="visible"
+        android:layout_toRightOf="@+id/cashHead"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:paddingLeft="10dp"
@@ -100,10 +102,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:gravity="center_horizontal"
+        android:visibility="visible"
         android:layout_below="@+id/cashHead"
-        android:layout_alignParentLeft="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible" />
+        android:layout_alignLeft="@+id/cashHead"
+        android:layout_alignStart="@+id/cashHead" />
 
     <TextView
         android:id="@+id/credit"
@@ -114,11 +116,10 @@
         android:gravity="center"
         android:layout_alignBottom="@+id/creditHead"
         android:layout_alignTop="@+id/creditHead"
-        android:layout_alignLeft="@+id/stockImage"
-        android:layout_alignStart="@+id/stockImage"
-        android:layout_alignRight="@+id/stockImage"
-        android:layout_alignEnd="@+id/stockImage"
-        android:visibility="invisible" />
+        android:visibility="visible"
+        android:layout_toRightOf="@+id/cashHead"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
     <ImageView
@@ -126,22 +127,24 @@
         android:src="@drawable/default_stock"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
+        android:visibility="visible"
         android:layout_below="@+id/itemName"
-        android:visibility="invisible" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
     <Button
         android:id="@+id/investigate"
         android:src="@drawable/investigate_icon"
-        android:layout_width="fill_parent"
+        android:layout_width="150dp"
         android:onClick="seeItem"
         android:text="Not In Stock!"
         android:textSize="15dp"
-        android:layout_height="80dp"
-        android:layout_alignLeft="@+id/stockImage"
-        android:layout_alignRight="@+id/stockImage"
+        android:layout_height="50dp"
+        android:visibility="visible"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/creditHead" />
 
 </RelativeLayout>
+</ScrollView>

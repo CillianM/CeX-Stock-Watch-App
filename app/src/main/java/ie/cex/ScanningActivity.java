@@ -1,7 +1,9 @@
 package ie.cex;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -16,10 +18,12 @@ import android.widget.Toast;
 import ie.cex.Connectivity.DetectConnection;
 import ie.cex.Connectivity.DownloadImage;
 import ie.cex.Connectivity.ProductGrabber;
+import ie.cex.Connectivity.ScannerGrabber;
 import ie.cex.DatabaseHandler.DatabaseHandler;
 import ie.cex.DatabaseHandler.ScannerHandler;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import ie.cex.R;
 
@@ -27,12 +31,13 @@ import ie.cex.R;
 public class ScanningActivity extends Activity {
 
     int deleteCounter = 0;
+    linkArrayAdaptor listAdapter;
+    ScannerGrabber grabber = null;
     String [] listOfItems;
     String [] picURL;
     String [] listOfBuy;
     String [] listOfCash;
     String [] listOfCredit;
-    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,48 +154,23 @@ public class ScanningActivity extends Activity {
                 }
             });
 
-            linkArrayAdaptor listAdapter = new linkArrayAdaptor(this, listOfItems);
+        listAdapter = new linkArrayAdaptor(this, listOfItems);
             mainListView.setAdapter(listAdapter);
     }
 
-    public void addItem(String url) {
-        if (DetectConnection.checkInternetConnection(ScanningActivity.this)) {
-            ImageView stockImage = (ImageView) findViewById(R.id.itemImage);
-            DownloadImage downloadImage = new DownloadImage(stockImage);
-
-            ProductGrabber grabber = new ProductGrabber(new DatabaseHandler(getBaseContext()), url, true);
+    public void addItem(String url)
+    {
+        if (DetectConnection.checkInternetConnection(ScanningActivity.this))
+        {
+            View view = findViewById(android.R.id.content);
+            grabber = new ScannerGrabber(new ScannerHandler(getBaseContext()), url, true,getBaseContext(),view);
             grabber.execute();
             try {
                 grabber.get();
-            } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "An error occured please try again later", Toast.LENGTH_LONG).show();
+                recreate();
             }
-
-
-            if (grabber.exists)
-            {
-                TextView buy = (TextView) findViewById(R.id.buy);
-                TextView cash = (TextView) findViewById(R.id.cash);
-                TextView credit = (TextView) findViewById(R.id.credit);
-                downloadImage.execute(grabber.pictureURL);
-                grabber.price = grabber.price.substring(grabber.price.indexOf(";") + 1, grabber.price.indexOf(".") + 3);
-                grabber.cash = grabber.cash.substring(grabber.cash.indexOf(";") + 1, grabber.cash.indexOf(".") + 3);
-                grabber.credit = grabber.credit.substring(grabber.credit.indexOf(";") + 1, grabber.credit.indexOf(".") + 3);
-
-                ScannerHandler handler = new ScannerHandler(getBaseContext());
-                try {
-                    handler.open();
-                    handler.insertData(url, grabber.name, grabber.pictureURL, grabber.price, grabber.cash, grabber.credit);
-                    handler.close();
-                } catch (Exception e) {
-
-                }
-
-            }
-            else
-            {
-                Toast.makeText(getBaseContext(), "This barcode does not exist, Try searching manually", Toast.LENGTH_LONG).show();
-            }
+            catch(Exception e)
+            {}
         }
         else
         {
@@ -249,4 +229,5 @@ public class ScanningActivity extends Activity {
         findViewById(R.id.CashIcon).setVisibility(View.GONE);
         findViewById(R.id.CreditIcon).setVisibility(View.GONE);
     }
+
 }
