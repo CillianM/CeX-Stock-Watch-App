@@ -16,8 +16,13 @@ import ie.cex.ScanningActivity;
 import ie.cex.linkArrayAdaptor;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class ScannerGrabber extends AsyncTask<Void,Void,Void>
 {
@@ -27,14 +32,16 @@ public class ScannerGrabber extends AsyncTask<Void,Void,Void>
     String tmpurl;
     public String name;
     Boolean wantPrice;
+    private String code;
     public Boolean exists = true;
     public String price = "Null";
     public String cash = "Null";
     public String credit = "Null";
     public String pictureURL;
 
-    public ScannerGrabber(ScannerHandler handler, String tmpurl,boolean wantPrice,Context context,View mView)
+    public ScannerGrabber(ScannerHandler handler, String tmpurl,String code,boolean wantPrice,Context context,View mView)
     {
+        this.code = code;
         this.mView = mView;
         this.context = context;
         this.handler = handler;
@@ -46,6 +53,8 @@ public class ScannerGrabber extends AsyncTask<Void,Void,Void>
     protected Void doInBackground(Void... params)
     {
         try {
+            if(!tmpurl.contains(code))
+                throw new noProductException();
             URL url = new URL(tmpurl);
             String str;
 
@@ -63,27 +72,18 @@ public class ScannerGrabber extends AsyncTask<Void,Void,Void>
                     }
                 }
 
-                if (strTemp.contains("productTitle")) {
-                    int start = strTemp.indexOf(">");
-                    int end = strTemp.indexOf("<", start);
-                    str = strTemp.substring(start + 1, end);
-                    name = str;
-                }
-
-                if (strTemp.contains("m-card-light")) {
-                    int start = strTemp.indexOf("=") + 2;
-                    str = strTemp.substring(start, strTemp.length());
-                    start = str.indexOf("=") + 2;
-                    str = str.substring(start, str.length());
-                    int end = str.indexOf("\"");
-                    pictureURL = str.substring(0, end);
+                if (strTemp.contains("pr-detail-img")) {
+                    strTemp = br.readLine();
+                    name = getName(strTemp);
+                    pictureURL = getPictureURL(strTemp);
                     if (!wantPrice)
                         break;
                 }
+
                 if (strTemp.contains("id=\"wesellFor")) {
-                    strTemp = br.readLine();
-                    int end = strTemp.indexOf("<");
-                    price = strTemp.substring(0,end);
+                    int start = strTemp.indexOf(">") + 1;
+                    int end = strTemp.indexOf("<",start);
+                    price = strTemp.substring(start,end);
                 }
 
                 if (strTemp.contains("id=\"webuyFor")) {
@@ -94,14 +94,16 @@ public class ScannerGrabber extends AsyncTask<Void,Void,Void>
 
                 if (strTemp.contains("id=\"webuyVoucher")) {
                     strTemp = br.readLine();
-                    strTemp = br.readLine();
                     int end = strTemp.indexOf("<");
                     credit = strTemp.substring(0,end);
                 }
             }
             br.close();
         }
-
+        catch (noProductException e)
+        {
+            Toast.makeText(context, "This barcode does not exist, Try searching manually", Toast.LENGTH_LONG).show();
+        }
         catch (Exception e)
         {
             System.out.println(e);
@@ -136,6 +138,34 @@ public class ScannerGrabber extends AsyncTask<Void,Void,Void>
             Toast.makeText(context, "This barcode does not exist, Try searching manually", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private String getName(String input)
+    {
+        String output = null;
+        int start = input.indexOf("=") + 2;
+        output = input.substring(start, input.length());
+        start = output.indexOf("=") + 2;
+        output = output.substring(start, output.length());
+        int end = output.indexOf("\"");
+        output = output.substring(0, end);
+        return output;
+    }
+
+    private String getPictureURL(String input)
+    {
+        String output = null;
+        int start = input.indexOf("=") + 2;
+        int end = input.indexOf("\"",start);
+        output = input.substring(start,end);
+        return output;
+    }
+
+    private class noProductException extends Exception
+    {
+        public noProductException(){
+            //null
+        }
     }
 
 

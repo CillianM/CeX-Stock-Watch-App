@@ -44,20 +44,10 @@ public class ProductGrabber extends AsyncTask<Void,Void,Void>
                         }
                     }
 
-                    if (strTemp.contains("productTitle")) {
-                        int start = strTemp.indexOf(">");
-                        int end = strTemp.indexOf("<", start);
-                        str = strTemp.substring(start + 1, end);
-                        name = str;
-                    }
-
-                    if (strTemp.contains("m-card-light")) {
-                        int start = strTemp.indexOf("=") + 2;
-                        str = strTemp.substring(start, strTemp.length());
-                        start = str.indexOf("=") + 2;
-                        str = str.substring(start, str.length());
-                        int end = str.indexOf("\"");
-                        pictureURL = str.substring(0, end);
+                    if (strTemp.contains("pr-detail-img")) {
+                        strTemp = br.readLine();
+                        name = getName(strTemp);
+                        pictureURL = getPictureURL(strTemp);
                         break;
                     }
             }
@@ -88,6 +78,26 @@ public class ProductGrabber extends AsyncTask<Void,Void,Void>
 
     }
 
+    private String getName(String input)
+    {
+        String output = null;
+        int start = input.indexOf("=") + 2;
+        output = input.substring(start, input.length());
+        start = output.indexOf("=") + 2;
+        output = output.substring(start, output.length());
+        int end = output.indexOf("\"");
+        output = output.substring(0, end);
+        return output;
+    }
+
+    private String getPictureURL(String input)
+    {
+        String output = null;
+        int start = input.indexOf("=") + 2;
+        int end = input.indexOf("\"",start);
+        output = input.substring(start,end);
+        return output;
+    }
 
 
 }

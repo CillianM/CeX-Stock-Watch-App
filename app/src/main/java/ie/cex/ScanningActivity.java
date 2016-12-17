@@ -87,7 +87,7 @@ public class ScanningActivity extends Activity {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 Log.i("xZing", "contents: " + contents + " format: " + format); // Handle successful scan
-                addItem("https://ie.m.webuy.com/site/productDetail?productId=" + contents);
+                addItem("https://ie.m.webuy.com/site/productDetail?productId=" + contents,contents);
                 Intent i = getIntent();
                 finish();
                 startActivity(i);
@@ -158,12 +158,12 @@ public class ScanningActivity extends Activity {
             mainListView.setAdapter(listAdapter);
     }
 
-    public void addItem(String url)
+    public void addItem(String url,String contents)
     {
         if (DetectConnection.checkInternetConnection(ScanningActivity.this))
         {
             View view = findViewById(android.R.id.content);
-            grabber = new ScannerGrabber(new ScannerHandler(getBaseContext()), url, true,getBaseContext(),view);
+            grabber = new ScannerGrabber(new ScannerHandler(getBaseContext()), url,contents, true,getBaseContext(),view);
             grabber.execute();
             try {
                 grabber.get();

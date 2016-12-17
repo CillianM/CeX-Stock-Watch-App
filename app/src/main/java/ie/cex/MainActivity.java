@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
         String url = mWebView.getUrl();
 
-        if(!url.contains("productDetail"))
+        if(!url.contains("product-detail"))
             Toast.makeText(getBaseContext(), "Can only add item pages to watchlist!", Toast.LENGTH_LONG).show();
 
         else
