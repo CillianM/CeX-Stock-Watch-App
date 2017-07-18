@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
 
     <TextView
@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Loyalty Card"
+        android:textColor="@color/black"
         android:gravity="center"
         android:textSize="30sp"/>
 
@@ -20,7 +21,6 @@
         android:orientation="vertical" >
 
         <ImageView
-            xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/barCode"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="Name"
+        android:textColor="@color/black"
         android:gravity="center"
         android:textSize="20sp"/>
 
@@ -39,6 +40,7 @@
         android:id="@+id/locationSpinner"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:textColor="@color/black"
         android:gravity="center"></Spinner>
 
 
@@ -52,12 +54,14 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/black"
             android:id="@+id/itemList">
         </ListView>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/noItems"
+            android:textColor="@color/black"
             android:visibility="gone"
             android:text="Items you watch will appear here!"
             android:textSize="20sp"

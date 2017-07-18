@@ -133,13 +133,12 @@
         android:layout_alignParentStart="true" />
 
 
-    <Button
-        android:id="@+id/investigate"
-        android:src="@drawable/investigate_icon"
+    <TextView
+        android:id="@+id/stock"
         android:layout_width="150dp"
-        android:onClick="seeItem"
-        android:text="Not In Stock!"
-        android:textSize="15dp"
+        android:text="In Stock!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         android:layout_height="50dp"
         android:visibility="visible"
         android:layout_alignParentBottom="true"

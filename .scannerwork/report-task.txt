@@ -1,0 +1,5 @@
+projectKey=ie.cex:Cex
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/ie.cex:Cex
+ceTaskId=AV1TJD3A1ZGu-J6oeSZD
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AV1TJD3A1ZGu-J6oeSZD

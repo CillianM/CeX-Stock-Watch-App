@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import ie.cex.DatabaseHandler.DatabaseHandler;
-
-import ie.cex.R;
+import ie.cex.handlers.DatabaseHandler;
 
 public class ViewItemPopup extends Activity {
 
@@ -39,12 +37,6 @@ public class ViewItemPopup extends Activity {
         name = intent.getStringExtra("NAME");
     }
 
-    public void done(View v)
-    {
-        Intent intent = new Intent(this,ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
 
     public void updateName(View v)
     {
@@ -60,7 +52,7 @@ public class ViewItemPopup extends Activity {
             handler.open();
             handler.updateName(name, newName);
             handler.close();
-            Intent intent = new Intent(this,ProfileActivity.class);
+            Intent intent = new Intent(this, ContainerActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
@@ -72,7 +64,7 @@ public class ViewItemPopup extends Activity {
         handler.open();
         handler.removeName(name);
         handler.close();
-        Intent intent = new Intent(this,ProfileActivity.class);
+        Intent intent = new Intent(this, ContainerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

@@ -131,16 +131,14 @@
         android:visibility="invisible" />
 
 
-    <Button
-        android:id="@+id/investigate"
-        android:src="@drawable/investigate_icon"
+    <TextView
+        android:id="@+id/stock"
         android:layout_width="fill_parent"
-        android:onClick="seeItem"
-        android:text="Not In Stock!"
-        android:textSize="15dp"
+        android:text="In Stock!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:gravity="center"
         android:layout_height="80dp"
-        android:layout_alignLeft="@+id/stockImage"
-        android:layout_alignRight="@+id/stockImage"
         android:layout_alignParentBottom="true"
         android:visibility="invisible" />
 

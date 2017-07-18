@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import ie.cex.DatabaseHandler.UserHandler;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
-import ie.cex.R;
+import ie.cex.handlers.UserHandler;
 
 public class ViewBarcodePopup extends Activity {
 
@@ -38,12 +38,6 @@ public class ViewBarcodePopup extends Activity {
         barcode = intent.getStringExtra("BAR");
     }
 
-    public void done(View v)
-    {
-        Intent intent = new Intent(this,ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
 
     public void updateName(View v)
     {
@@ -59,30 +53,22 @@ public class ViewBarcodePopup extends Activity {
             handler.open();
             handler.updateBarcode(barcode, newBarcode);
             handler.close();
-            Intent intent = new Intent(this,ProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            finish();
         }
     }
 
     public void scan(View v)
     {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-        startActivityForResult(intent, 0);
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
+        integrator.initiateScan(); // `this` is the current Fragment
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                currentName.setText(contents);
-
-            } else if (resultCode == RESULT_CANCELED) { // Handle cancel
-                Log.i("xZing", "Cancelled");
-            }
-        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        currentName.setText(result.getContents());
     }
 
 }
