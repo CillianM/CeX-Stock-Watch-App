@@ -9,16 +9,19 @@ import android.widget.ImageView;
 import java.io.InputStream;
 
 public class DownloadImage extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
+    private ImageView bmImage;
+    private String locationUrl;
 
-    public DownloadImage(ImageView bmImage) {
+    public DownloadImage(ImageView bmImage, String locationUrl) {
         this.bmImage = bmImage;
+        this.locationUrl = locationUrl;
     }
 
     @Override
     protected Bitmap doInBackground(String... urls) {
         String urldisplay = urls[0];
-        urldisplay = "https://ie.webuy.com" + urldisplay;
+        locationUrl = locationUrl.replace(".m", "");
+        urldisplay = "https://" + locationUrl + urldisplay;
         Bitmap mIcon11 = null;
         try {
             InputStream in = new java.net.URL(urldisplay).openStream();

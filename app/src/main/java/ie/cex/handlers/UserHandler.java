@@ -88,15 +88,6 @@ public class UserHandler {
         return db.query(TABLE_NAME, new String[]{URL, NAME, BARCODE}, null, null, null, null, null);
     }
 
-
-    public boolean updateURL(String oldURL,String newURL)
-    {
-        ContentValues content = new ContentValues();
-        content.put(URL,newURL);
-        db.update(TABLE_NAME,content,URL + " = ?", new String[] { oldURL });
-        return true;
-    }
-
     public boolean updateName(String oldName, String newName)
     {
         ContentValues content = new ContentValues();

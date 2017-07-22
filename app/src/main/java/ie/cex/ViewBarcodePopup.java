@@ -15,8 +15,8 @@ import ie.cex.handlers.UserHandler;
 
 public class ViewBarcodePopup extends Activity {
 
-    String barcode;
-    EditText currentName;
+    private String barcode;
+    private EditText currentName;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

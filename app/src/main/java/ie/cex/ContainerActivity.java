@@ -22,12 +22,9 @@ import ie.cex.handlers.DatabaseHandler;
 
 public class ContainerActivity extends AppCompatActivity {
 
-    FragmentManager fragmentManager;
     int count = 0;
-    FloatingActionMenu menu;
-    FloatingActionButton watch;
-    FloatingActionButton scan;
-    FloatingActionButton user;
+    private FloatingActionMenu menu;
+    private FloatingActionButton watch;
 
     // Arraylist of custom nav items for side bar
     List<NavItem> mNavItems = new ArrayList<>();
@@ -43,7 +40,8 @@ public class ContainerActivity extends AppCompatActivity {
         mNavItems.add(new NavItem("Profile", "Scan In Items To Sell", R.drawable.user));
 
         menu = (FloatingActionMenu) findViewById(R.id.menu);
-        user = (FloatingActionButton) findViewById(R.id.user);
+        FloatingActionButton user = (FloatingActionButton) findViewById(R.id.user);
+        assert user != null;
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +55,8 @@ public class ContainerActivity extends AppCompatActivity {
                 watchItem();
             }
         });
-        scan = (FloatingActionButton) findViewById(R.id.scan);
+        FloatingActionButton scan = (FloatingActionButton) findViewById(R.id.scan);
+        assert scan != null;
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,6 +130,7 @@ public class ContainerActivity extends AppCompatActivity {
         Fragment fragment = null; //initialize empty fragment
         count = 0;
         closeFab();
+        FragmentManager fragmentManager;
         if (position == 0) {
             fragment = new WebFragment();
             //Replace current fragment

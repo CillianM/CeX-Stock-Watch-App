@@ -1,25 +1,26 @@
 package ie.cex.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import ie.cex.R;
 import ie.cex.StockCheck;
-import ie.cex.ViewBarcodePopup;
-import ie.cex.ViewItemPopup;
 import ie.cex.handlers.DatabaseHandler;
 import ie.cex.handlers.UserHandler;
 import ie.cex.utils.BarcodeCreator;
@@ -30,15 +31,14 @@ import ie.cex.utils.BarcodeCreator;
 
 public class ProfileFragment extends Fragment {
 
-    ImageView barcodeImage;
-    TextView barcodeText;
-    Spinner location;
-    String locationURL;
-    String email;
-    String barcode;
-    String[] listOfItems;
-    String[] listOfURLs;
-    String[] listOfPics;
+    private String barcode;
+    private String username;
+    private String[] listOfItems;
+    private String[] listOfURLs;
+    private String[] listOfPics;
+    private ImageView barcodeImage;
+    private TextView barcodeText;
+    private ArrayAdapter<String> ad;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -52,27 +52,31 @@ public class ProfileFragment extends Fragment {
         return inflater.inflate(R.layout.activity_profile, container, false);
     }
 
+    public void setupBarcode(String barcodeString) {
+        BarcodeCreator bc = new BarcodeCreator(barcodeString, barcodeImage);
+        bc.createBarcode();
+        barcodeText.setText(barcodeString + System.getProperty("line.separator"));
+    }
+
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
 
         barcodeImage = (ImageView) (view.findViewById(R.id.barCode));
         createBarcode();
-        location = (Spinner) (view.findViewById(R.id.locationSpinner));
-        createSpinner();
         barcodeText = (TextView) (view.findViewById(R.id.barcodeData));
+        TextView nameText = (TextView) (view.findViewById(R.id.Title));
+        nameText.setText(username);
 
 
-        if (!barcode.equals("Skipped")) {
-            BarcodeCreator bc = new BarcodeCreator(barcode, barcodeImage);
-            bc.createBarcode();
-            barcodeText.setText(barcode + System.getProperty("line.separator"));
+        if (barcode.length() > 0) {
+            setupBarcode(barcode);
         } else {
             barcodeImage.setImageResource(R.drawable.card);
             barcodeText.setText("No Barcode Data" + System.getProperty("line.separator"));
         }
 
 
-        ListView mainListView = (ListView) view.findViewById(R.id.itemList);
+        final ListView mainListView = (ListView) view.findViewById(R.id.itemList);
 
         if (itemsSaved()) {
             createList();
@@ -97,17 +101,28 @@ public class ProfileFragment extends Fragment {
             mainListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 //on item click create a url and open it in the browser
                 public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id) {
-                    String url = listOfURLs[position];
-                    String name = listOfItems[position];
-                    Intent intent = new Intent(getActivity(), ViewItemPopup.class);
-                    intent.putExtra("URL", url);
-                    intent.putExtra("NAME", name);
-                    startActivity(intent);
+                    final String name = listOfItems[position];
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == DialogInterface.BUTTON_POSITIVE) {
+                                DatabaseHandler handler = new DatabaseHandler(getActivity().getBaseContext());
+                                handler.open();
+                                handler.removeName(name);
+                                handler.close();
+                                ad.notifyDataSetChanged();
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setMessage("Are you sure you want to delete " + name + "?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
                     return true;
                 }
             });
 
-            ArrayAdapter<String> ad = new ArrayAdapter<>(getActivity(), R.layout.textview, listOfItems);
+            ad = new ArrayAdapter<>(getActivity(), R.layout.textview, listOfItems);
             mainListView.setAdapter(ad);
         }
         else
@@ -119,10 +134,39 @@ public class ProfileFragment extends Fragment {
 
         barcodeImage.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.activity_view_barcode_popup);
+                dialog.setTitle("Title...");
 
-                Intent intent = new Intent(getActivity(), ViewBarcodePopup.class);
-                intent.putExtra("BAR", barcode);
-                startActivity(intent);
+                DisplayMetrics dm = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+                int width = dm.widthPixels;
+                int height = dm.heightPixels;
+                dialog.getWindow().setLayout((int) (width * .6), (int) (height * .4));
+
+                final EditText newCode = (EditText) dialog.findViewById(R.id.potentialItem);
+                Button scanButton = (Button) dialog.findViewById(R.id.scan);
+                Button submitButton = (Button) dialog.findViewById(R.id.submit);
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UserHandler handler = new UserHandler(getActivity());
+                        handler.open();
+                        handler.updateBarcode(barcode, newCode.getText().toString());
+                        handler.close();
+                        dialog.dismiss();
+                        setupBarcode(barcode);
+                    }
+                });
+                scanButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Not needed
+                    }
+                });
+
+                dialog.show();
                 return true;
             }
         });
@@ -137,7 +181,8 @@ public class ProfileFragment extends Fragment {
         handler.close();
         return(amount > 0);
     }
-    void createList()
+
+    private void createList()
     {
         DatabaseHandler handler = new DatabaseHandler(getActivity().getBaseContext());
         handler.open();
@@ -160,7 +205,7 @@ public class ProfileFragment extends Fragment {
         handler.close();
     }
 
-    void createBarcode()
+    private void createBarcode()
     {
         UserHandler handler = new UserHandler(getActivity().getBaseContext());
         handler.open();
@@ -168,54 +213,16 @@ public class ProfileFragment extends Fragment {
             Cursor c1 = handler.returnData();
             if (c1.moveToFirst()) {
                 do {
-                    locationURL = c1.getString(0);
-                    email = c1.getString(1);
-                    barcode = c1.getString(3);
+                    username = c1.getString(1);
+                    barcode = c1.getString(2);
                 }
                 while (c1.moveToNext());
             }
         } else {
-            locationURL = "";
-            email = "";
             barcode = "Skipped";
         }
 
         handler.close();
 
-    }
-
-    void createSpinner()
-    {
-        ArrayList<String> locationlist = new ArrayList<>();
-        String [] locations = {
-                "ie.m.webuy.com",
-                "uk.m.webuy.com",
-                "us.m.webuy.com",
-                "es.m.webuy.com",
-                "in.m.webuy.com",
-                "pt.m.webuy.com",
-                "nl.m.webuy.com",
-                "mx.m.webuy.com",
-                "pl.m.webuy.com",
-                "au.m.webuy.com",
-                "it.m.webuy.com"
-        };
-
-        locationlist.add(locationURL);
-
-        for (String location1 : locations) {
-            if (!location1.equals(locationURL))
-                locationlist.add(location1);
-        }
-
-        final ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, locationlist);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        location.setAdapter(dataAdapter);
     }
 }

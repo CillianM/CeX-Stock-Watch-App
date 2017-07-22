@@ -52,21 +52,14 @@ public class ViewItemPopup extends Activity {
             handler.open();
             handler.updateName(name, newName);
             handler.close();
-            Intent intent = new Intent(this, ContainerActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            finish();
         }
     }
 
     public void delete(View v)
     {
-        DatabaseHandler handler = new DatabaseHandler(getBaseContext());
-        handler.open();
-        handler.removeName(name);
-        handler.close();
-        Intent intent = new Intent(this, ContainerActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+
+        finish();
     }
 }
 

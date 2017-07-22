@@ -2,6 +2,7 @@ package ie.cex.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import ie.cex.R;
 import ie.cex.connectivity.DetectConnection;
+import ie.cex.handlers.UserHandler;
 
 /**
  * Created by Cillian on 17/07/2017.
@@ -44,7 +46,20 @@ public class WebFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        String url = "https://ie.m.webuy.com";
+        String url = "";
+        UserHandler handler = new UserHandler(getActivity().getBaseContext());
+        handler.open();
+        if (handler.returnAmount() > 0) {
+            Cursor c1 = handler.returnData();
+            if (c1.moveToFirst()) {
+                do {
+                    url = c1.getString(0);
+                }
+                while (c1.moveToNext());
+            }
+        }
+        handler.close();
+        url = "https://" + url;
         mWebView = (WebView) view.findViewById(R.id.activity_main_webview);
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setJavaScriptEnabled(true);

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import ie.cex.handlers.UserHandler;
 
@@ -15,29 +14,29 @@ public class CoverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cover);
 
-        //Wait the timeout then move on to home activity
+        Intent i;
+
+        if (userExists()) {
+            i = new Intent(CoverActivity.this, SetupActivity.class);
+        } else {
+            i = new Intent(CoverActivity.this, ContainerActivity.class);
+        }
+        final Intent intent = i;
         int timeOut = 1000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                createUser();
-                Intent i = new Intent(CoverActivity.this, ContainerActivity.class);
-                startActivity(i);
+                startActivity(intent);
                 finish();
             }
         }, timeOut);
     }
 
-    private void createUser() {
+    private boolean userExists() {
         UserHandler handler = new UserHandler(getBaseContext());
         handler.open();
-        if (handler.returnAmount() < 1) {
-            try {
-                handler.insertData("TEST", "TEST", "TEST");
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-            }
-        }
+        int amount = handler.returnAmount();
         handler.close();
+        return amount == 0;
     }
 }

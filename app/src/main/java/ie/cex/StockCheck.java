@@ -2,6 +2,7 @@ package ie.cex;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -14,19 +15,31 @@ import android.widget.Toast;
 import ie.cex.connectivity.DetectConnection;
 import ie.cex.connectivity.DownloadImage;
 import ie.cex.connectivity.WatchlistGrabber;
+import ie.cex.handlers.UserHandler;
 
 
 public class StockCheck extends Activity {
 
-    String name;
-    String url;
-    String picUrl;
+    private String url;
+    private String picUrl;
+    private String locationUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
         {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_check);
+            UserHandler handler = new UserHandler(getBaseContext());
+            handler.open();
+            if (handler.returnAmount() > 0) {
+                Cursor c1 = handler.returnData();
+                if (c1.moveToFirst()) {
+                    do {
+                        locationUrl = c1.getString(0);
+                    }
+                    while (c1.moveToNext());
+                }
+            }
 
         TextView itemName = (TextView) findViewById(R.id.itemName);
 
@@ -46,7 +59,7 @@ public class StockCheck extends Activity {
 
         Intent intent = getIntent();
         url = intent.getStringExtra("URL");
-        name = intent.getStringExtra("NAME");
+            String name = intent.getStringExtra("NAME");
         picUrl = intent.getStringExtra("PIC");
         itemName.setText(name);
         check();
@@ -57,7 +70,7 @@ public class StockCheck extends Activity {
         if(DetectConnection.checkInternetConnection(StockCheck.this)) {
             findViewById(R.id.connectionMessage).setVisibility(View.GONE);
             ImageView stockImage = (ImageView) findViewById(R.id.stockImage);
-            DownloadImage downloadImage = new DownloadImage(stockImage);
+            DownloadImage downloadImage = new DownloadImage(stockImage, locationUrl);
             downloadImage.execute(picUrl);
             WatchlistGrabber grabber = new WatchlistGrabber(url, findViewById(android.R.id.content));
             grabber.execute();

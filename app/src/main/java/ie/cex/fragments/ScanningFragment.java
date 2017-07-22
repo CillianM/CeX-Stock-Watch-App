@@ -28,6 +28,7 @@ import ie.cex.connectivity.DetectConnection;
 import ie.cex.connectivity.DownloadImage;
 import ie.cex.connectivity.ScannerGrabber;
 import ie.cex.handlers.ScannerHandler;
+import ie.cex.handlers.UserHandler;
 
 /**
  * Created by Cillian on 17/07/2017.
@@ -45,6 +46,7 @@ public class ScanningFragment extends Fragment {
     String[] listOfCredit;
     View layoutView;
     TextureView textureView;
+    private String locationUrl;
 
 
     public ScanningFragment() {
@@ -101,6 +103,18 @@ public class ScanningFragment extends Fragment {
                 }
             }
         });
+        UserHandler handler = new UserHandler(getActivity().getBaseContext());
+        handler.open();
+        if (handler.returnAmount() > 0) {
+            Cursor c1 = handler.returnData();
+            if (c1.moveToFirst()) {
+                do {
+                    locationUrl = c1.getString(0);
+                }
+                while (c1.moveToNext());
+            }
+        }
+        handler.close();
         swipeContainer.setColorSchemeResources(R.color.red);
         refreshList();
 
@@ -147,7 +161,7 @@ public class ScanningFragment extends Fragment {
                 String credit = listOfCredit[position];
 
                 ImageView stockImage = (ImageView) layoutView.findViewById(R.id.itemImage);
-                DownloadImage downloadImage = new DownloadImage(stockImage);
+                DownloadImage downloadImage = new DownloadImage(stockImage, locationUrl);
                 downloadImage.execute(picURL[position]);
 
                 TextView selectedCashValue = (TextView) layoutView.findViewById(R.id.SelectedCashValue);
@@ -199,7 +213,7 @@ public class ScanningFragment extends Fragment {
                 Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getActivity(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                addItem("https://ie.webuy.com/product.php?sku=" + result.getContents(), result.getContents());
+                addItem("https://" + locationUrl + "/product.php?sku=" + result.getContents(), result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
