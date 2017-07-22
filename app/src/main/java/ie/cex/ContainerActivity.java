@@ -22,12 +22,11 @@ import ie.cex.handlers.DatabaseHandler;
 
 public class ContainerActivity extends AppCompatActivity {
 
-    int count = 0;
     private FloatingActionMenu menu;
     private FloatingActionButton watch;
 
     // Arraylist of custom nav items for side bar
-    List<NavItem> mNavItems = new ArrayList<>();
+    private List<NavItem> mNavItems = new ArrayList<>();
     private boolean watchRemoved = false;
 
     @Override
@@ -128,7 +127,6 @@ public class ContainerActivity extends AppCompatActivity {
 
     private void selectFragment(int position) {
         Fragment fragment = null; //initialize empty fragment
-        count = 0;
         closeFab();
         FragmentManager fragmentManager;
         if (position == 0) {

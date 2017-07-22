@@ -33,18 +33,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <activity
-            android:name=".ViewItemPopup"
-            android:label="@string/title_activity_view_activity_popup"
-            android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name=".StockCheck"
             android:label="@string/title_activity_stock_check"
-            android:theme="@style/AppTheme.CustomTheme" />
-        <activity
-            android:name=".ViewBarcodePopup"
-            android:label="@string/title_activity_view_barcode_popup"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"

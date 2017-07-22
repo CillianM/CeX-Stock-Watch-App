@@ -40,10 +40,6 @@ public class ProfileFragment extends Fragment {
     private TextView barcodeText;
     private ArrayAdapter<String> ad;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,14 +55,13 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle instanceState) {
 
         barcodeImage = (ImageView) (view.findViewById(R.id.barCode));
         createBarcode();
         barcodeText = (TextView) (view.findViewById(R.id.barcodeData));
         TextView nameText = (TextView) (view.findViewById(R.id.Title));
         nameText.setText(username);
-
 
         if (barcode.length() > 0) {
             setupBarcode(barcode);
@@ -75,26 +70,17 @@ public class ProfileFragment extends Fragment {
             barcodeText.setText("No Barcode Data" + System.getProperty("line.separator"));
         }
 
-
         final ListView mainListView = (ListView) view.findViewById(R.id.itemList);
 
         if (itemsSaved()) {
             createList();
-
-            //create listview
-
-            //create listener for each link in list
             mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 //on item click create a url and open it in the browser
                 public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                     String url = listOfURLs[position];
                     String name = listOfItems[position];
                     String picURL = listOfPics[position];
-                    Intent intent = new Intent(getActivity(), StockCheck.class);
-                    intent.putExtra("URL", url);
-                    intent.putExtra("NAME", name);
-                    intent.putExtra("PIC", picURL);
-                    startActivity(intent);
+                    openStockCheck(url, name, picURL);
                 }
             });
 
@@ -106,11 +92,7 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == DialogInterface.BUTTON_POSITIVE) {
-                                DatabaseHandler handler = new DatabaseHandler(getActivity().getBaseContext());
-                                handler.open();
-                                handler.removeName(name);
-                                handler.close();
-                                ad.notifyDataSetChanged();
+                                removeName(name);
                             }
                         }
                     };
@@ -134,43 +116,62 @@ public class ProfileFragment extends Fragment {
 
         barcodeImage.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.setContentView(R.layout.activity_view_barcode_popup);
-                dialog.setTitle("Title...");
-
-                DisplayMetrics dm = new DisplayMetrics();
-                getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-                int width = dm.widthPixels;
-                int height = dm.heightPixels;
-                dialog.getWindow().setLayout((int) (width * .6), (int) (height * .4));
-
-                final EditText newCode = (EditText) dialog.findViewById(R.id.potentialItem);
-                Button scanButton = (Button) dialog.findViewById(R.id.scan);
-                Button submitButton = (Button) dialog.findViewById(R.id.submit);
-                submitButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        UserHandler handler = new UserHandler(getActivity());
-                        handler.open();
-                        handler.updateBarcode(barcode, newCode.getText().toString());
-                        handler.close();
-                        dialog.dismiss();
-                        setupBarcode(barcode);
-                    }
-                });
-                scanButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Not needed
-                    }
-                });
-
-                dialog.show();
+                showDialog();
                 return true;
             }
         });
+    }
 
+    private void openStockCheck(String url, String name, String picURL) {
+        Intent intent = new Intent(getActivity(), StockCheck.class);
+        intent.putExtra("URL", url);
+        intent.putExtra("NAME", name);
+        intent.putExtra("PIC", picURL);
+        startActivity(intent);
+    }
+
+    private void removeName(String username) {
+        DatabaseHandler handler = new DatabaseHandler(getActivity().getBaseContext());
+        handler.open();
+        handler.removeName(username);
+        handler.close();
+        ad.notifyDataSetChanged();
+    }
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.activity_view_barcode_popup);
+        dialog.setTitle("Title...");
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        dialog.getWindow().setLayout((int) (width * .6), (int) (height * .4));
+
+        final EditText newCode = (EditText) dialog.findViewById(R.id.potentialItem);
+        Button scanButton = (Button) dialog.findViewById(R.id.scan);
+        Button submitButton = (Button) dialog.findViewById(R.id.submit);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserHandler handler = new UserHandler(getActivity());
+                handler.open();
+                handler.updateBarcode(barcode, newCode.getText().toString());
+                handler.close();
+                dialog.dismiss();
+                setupBarcode(barcode);
+            }
+        });
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Not needed
+            }
+        });
+
+        dialog.show();
 
     }
     public boolean itemsSaved()

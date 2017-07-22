@@ -15,8 +15,10 @@ import java.util.Map;
 
 public class BarcodeCreator {
 
-    String barcodeData;
-    ImageView iv;
+    private String barcodeData;
+    private ImageView iv;
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int BLACK = 0xFF000000;
 
     public BarcodeCreator(String data, ImageView iv)
     {
@@ -46,9 +48,6 @@ public class BarcodeCreator {
             Log.e("ERROR", e.toString());
         }
     }
-
-    private static final int WHITE = 0xFFFFFFFF;
-    private static final int BLACK = 0xFF000000;
 
     private Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int imgWidth, int imgHeight) throws WriterException {
         String contentsToEncode = contents;

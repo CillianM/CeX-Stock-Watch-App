@@ -11,23 +11,21 @@ import android.util.Log;
 
 public class DatabaseHandler {
 
-    public static final String NAME = "name";
-    public static final String PIC = "pic";
-    public static final String URL = "url";
-    public static final String TABLE_NAME = "stock";
-    public static final String DATA_BASE_NAME = "dataDB";
-    public static final int DATABASE_VERSION = 1;
-    public static final String TABLE_CREATE = "create table stock (name text not null, " + "pic text not null," +
+    private static final String NAME = "name";
+    private static final String PIC = "pic";
+    private static final String URL = "url";
+    private static final String TABLE_NAME = "stock";
+    private static final String DATA_BASE_NAME = "dataDB";
+    private static final int DATABASE_VERSION = 1;
+    private static final String TABLE_CREATE = "create table stock (name text not null, " + "pic text not null," +
             "url text not null);";
 
-    DataBaseHelper dbhelper;
-    Context ctx;
-    SQLiteDatabase db;
+    private DataBaseHelper dbhelper;
+    private SQLiteDatabase db;
 
 
     public DatabaseHandler(Context ctx)
     {
-        this.ctx = ctx;
         dbhelper = new DataBaseHelper(ctx);
     }
 

@@ -15,7 +15,7 @@ class NavItem {
         mIcon = icon;
     }
 
-    String getmTitle() {
+    public String getmTitle() {
         return mTitle;
     }
 

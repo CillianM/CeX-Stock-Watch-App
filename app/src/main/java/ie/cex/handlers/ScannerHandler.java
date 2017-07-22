@@ -11,25 +11,23 @@ import android.util.Log;
 
 public class ScannerHandler {
 
-    public static final String URL = "url";
-    public static final String NAME = "name";
-    public static final String PICURL = "picurl";
-    public static final String SELL = "sell";
-    public static final String CASH = "cash";
-    public static final String CREDIT = "credit";
-    public static final String TABLE_NAME = "scanner";
-    public static final String DATA_BASE_NAME = "myDB";
-    public static final int DATABASE_VERSION = 1;
-    public static final String TABLE_CREATE = "create table scanner (url text not null," + "name text not null," + "picurl text not null," + "sell text not null," + "cash text not null," + "credit text not null);";
+    private static final String URL = "url";
+    private static final String NAME = "name";
+    private static final String PICURL = "picurl";
+    private static final String SELL = "sell";
+    private static final String CASH = "cash";
+    private static final String CREDIT = "credit";
+    private static final String TABLE_NAME = "scanner";
+    private static final String DATA_BASE_NAME = "myDB";
+    private static final int DATABASE_VERSION = 1;
+    private static final String TABLE_CREATE = "create table scanner (url text not null," + "name text not null," + "picurl text not null," + "sell text not null," + "cash text not null," + "credit text not null);";
 
-    DataBaseHelper dbhelper;
-    Context ctx;
-    SQLiteDatabase db;
+    private DataBaseHelper dbhelper;
+    private SQLiteDatabase db;
 
 
     public ScannerHandler(Context ctx)
     {
-        this.ctx = ctx;
         dbhelper = new DataBaseHelper(ctx);
     }
 
